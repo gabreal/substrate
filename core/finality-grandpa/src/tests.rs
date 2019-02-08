@@ -344,17 +344,17 @@ impl Core<Block> for RuntimeApi {
 		unimplemented!("Not required for testing!")
 	}
 
-	fn version_with_context(&self, _: &BlockId<Block>, _: ExecutionContext) -> Result<RuntimeVersion> {
-		unimplemented!("Not required for testing!")
-	}
+	// fn version_with_context(&self, _: &BlockId<Block>, _: ExecutionContext) -> Result<RuntimeVersion> {
+	// 	unimplemented!("Not required for testing!")
+	// }
 
-	fn authorities_with_context(&self, _: &BlockId<Block>, _: ExecutionContext) -> Result<Vec<Ed25519AuthorityId>> {
-		unimplemented!("Not required for testing!")
-	}
+	// fn authorities_with_context(&self, _: &BlockId<Block>, _: ExecutionContext) -> Result<Vec<Ed25519AuthorityId>> {
+	// 	unimplemented!("Not required for testing!")
+	// }
 
-	fn execute_block_with_context(&self, _: &BlockId<Block>, _: Block, _: ExecutionContext) -> Result<()> {
-		unimplemented!("Not required for testing!")
-	}
+	// fn execute_block_with_context(&self, _: &BlockId<Block>, _: Block, _: ExecutionContext) -> Result<()> {
+	// 	unimplemented!("Not required for testing!")
+	// }
 
 	fn initialise_block_with_context(
 		&self,

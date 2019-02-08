@@ -474,9 +474,10 @@ impl<'a> Fold for ApiRuntimeImplToApiRuntimeApiImpl<'a> {
 	
 			// Rewrite the input parameters.
 			input.sig.decl.inputs = parse_quote! {
-				&self, at: &#block_id, params: Option<( #( #param_types ),* )>, params_encoded: Vec<u8>, #context_arg
+				&self, at: &#block_id, #context_arg, params: Option<( #( #param_types ),* )>, params_encoded: Vec<u8>
 			};
 
+			input.sig.ident = generate_method_runtime_api_impl_name(&input.sig.ident);
 			let ret_type = return_type_extract_type(&input.sig.decl.output);
 
 			// Generate the correct return type.
@@ -500,7 +501,7 @@ impl<'a> Fold for ApiRuntimeImplToApiRuntimeApiImpl<'a> {
 								#( #param_tuple_access ),*
 							)
 						}),
-						#execution_context
+						#execution_context,
 					)
 				}
 			)
@@ -527,23 +528,8 @@ impl<'a> Fold for ApiRuntimeImplToApiRuntimeApiImpl<'a> {
 		// the feature `std` or `test`.
 		input.attrs.push(parse_quote!( #[cfg(any(feature = "std", test))] ));
 
-		input = fold::fold_item_impl(self, input);
-
-		let mut methods_with_context = vec![];
-
-		for item in &mut input.items {
-			if let ImplItem::Method(ref mut method) = item {
-				let mut ctx_method = generate_method_with_context(method);
-				method.sig.ident = generate_method_runtime_api_impl_name(&method.sig.ident);
-				ctx_method.sig.ident = generate_method_runtime_api_impl_name(&ctx_method.sig.ident);
-				methods_with_context.push(ImplItem::Method(ctx_method));	
-			}
-		}
-
-		input.items.extend(methods_with_context);
-		input
+		fold::fold_item_impl(self, input)
 	}
-
 }
 
 /// Generate the implementations of the runtime apis for the `RuntimeApi` type.
